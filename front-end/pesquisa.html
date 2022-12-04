@@ -29,8 +29,8 @@
                     <input v-model="consulta.dataStr" class="form-control" type="date" id="inpDataStr" />
                 </div>
                 <div class="col-md-12 text-center">
-                    <button v-on:click="selecionaConsultas()" class="btn btn-primary mt-3">Buscar</button>
-                    <button v-on:click="selecionaConsultas()" class="btn btn-primary mt-3">Alterar</button>
+                    <button v-on:click="selecionar(c)" class="btn btn-primary mt-3">Buscar</button>
+                    <button v-on:click="selecionar(c)" class="btn btn-primary mt-3">Alterar</button>
                     <button type="button" class="btn btn-info mt-3 mx-xxl-5"><a href="/front-end/cadastro.html">Cadastrar</a></button>
                     <button type="button" class="btn btn-info mt-3"><a href="/front-end/historico.html">Historico</a></button>
                 </div>
@@ -98,19 +98,20 @@
             },
             methods: {
                 //Exibe o historico
-                selecionaConsultas(consulta) {
+                selecionaConsultas() {
                     let _this = this;
-                    axios.get(`http://localhost:8090/consulta/pesquisa?paciente=${_this.consulta.paciente}&dataStr=${_this.consulta.dataStr}`).then((r) => {
-                        _this.consulta = r.data;
-                        console.log(_this.consulta.value);
+                    axios.get("http://localhost:8090/historico/exibir").then((r) => {
+                        _this.consultas = r.data;
+                        console.log(_this.consultas);
                     });
                 },
                 //seleciona consulta por id
                 selecionar(c) {
                     let _this = this;
-                    axios.get("http://localhost:8090/consulta/get?id=" + c.id).then((r) => {
+                    axios.get(`http://localhost:8090/consulta/pesquisa?paciente=${c.paciente}&dataStr=${c.dataStr}`).then((r) => {
                         _this.consulta = r.data;
                         console.log(_this.consulta);
+                        _this.selecionaConsultas();
                     });
                 },
                 //salvar consulta
